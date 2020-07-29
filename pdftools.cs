@@ -5,6 +5,7 @@ using iTextSharp.text;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using pdfTools.Properties;
 
 namespace pdfTools
 {
@@ -41,7 +42,7 @@ namespace pdfTools
                 {
                     //Console.Write(txt);
                     String font = BaseFont.HELVETICA;
-                    SetStamp(args[1], args[2], args[3], font, args[4]);
+                    SetStamp(args[1], args[2], int.Parse(args[3]), font, args[4]);
 
                 }
 
@@ -200,11 +201,11 @@ namespace pdfTools
             return r;
         }
 
-        public static Boolean SetStamp(String inputFile, String outputFile, String imgFile, String font, String txt)
+        public static Boolean SetStamp(String inputFile, String outputFile, int imgindex, String font, String txt)
         {
             Boolean r = false;
             var bytes = File.ReadAllBytes(inputFile.ToString());
-            byte[] rbytes = AddStamp(bytes, imgFile, BaseFont.CreateFont(font, BaseFont.CP1252, false), txt);
+            byte[] rbytes = AddStamp(bytes, imgindex, BaseFont.CreateFont(font, BaseFont.CP1252, false), txt);
 
             File.WriteAllBytes(outputFile.ToString(), rbytes);
 
@@ -212,7 +213,7 @@ namespace pdfTools
             return r;
         }
 
-        private static byte[] AddStamp(byte[] bytes, String imgFile, BaseFont baseFont, String watermarkText)
+        private static byte[] AddStamp(byte[] bytes, int imgindex, BaseFont baseFont, String watermarkText)
         {
             float opFill = 0.9F;
             float opStroke = 0.9F;
@@ -234,9 +235,8 @@ namespace pdfTools
                     for (var i = 1; i <= pages; i++)
                     {
                         var dc = stamper.GetOverContent(i);
-                        System.Drawing.Image imgx =
-                            System.Drawing.Image.FromFile(imgFile, true);
-                        System.Drawing.Image img = ChangeImageOpacity(imgx, 0.7);
+                        System.Drawing.Image imgx = new Bitmap(Resources.stamp1);
+                        System.Drawing.Image img = ChangeImageOpacity(imgx, 0.8);
                         //pic.ScaleToFit(document.PageSize);
 
                         PdfContentByte pdfData = dc;
