@@ -124,8 +124,9 @@ namespace pdfTools
                 }
                 else
                 {
-                    err = Split(args[1], args[2], args[3]);
-                    if (err != "") Console.WriteLine(err);
+                        String pwd = args.Length > 3 ? args[3] : "";
+                        err = Split(args[1], args[2], pwd);
+                        if (err != "") Console.WriteLine(err);
                 }
             }
         }
